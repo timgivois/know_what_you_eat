@@ -227,41 +227,99 @@ private struct EditorContentView: View {
     // MARK: - Empty state
 
     private var emptyState: some View {
-        VStack(spacing: 20) {
-            Spacer().frame(height: 40)
+        VStack(spacing: 0) {
+            Spacer()
 
-            Image(systemName: "fork.knife.circle")
-                .font(.system(size: 64))
-                .foregroundStyle(.secondary)
+            // Illustration area
+            ZStack {
+                Circle()
+                    .fill(Color.accentColor.opacity(0.08))
+                    .frame(width: 160, height: 160)
 
-            Text("What did you eat today?")
-                .font(.title3.weight(.medium))
+                Circle()
+                    .fill(Color.accentColor.opacity(0.12))
+                    .frame(width: 110, height: 110)
 
-            Text("Take a photo or pick from your library.")
+                Image(systemName: "camera.viewfinder")
+                    .font(.system(size: 44, weight: .light))
+                    .foregroundStyle(Color.accentColor)
+            }
+            .padding(.bottom, 32)
+
+            Text("Capture your meals")
+                .font(.title2.weight(.semibold))
+                .padding(.bottom, 8)
+
+            Text("Snap a photo or choose from your library\nto build today's food layout.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
+                .lineSpacing(3)
+                .padding(.bottom, 36)
 
-            HStack(spacing: 16) {
+            // Action cards
+            VStack(spacing: 12) {
                 Button {
                     vm.showCamera = true
                 } label: {
-                    Label("Camera", systemImage: "camera.fill")
-                        .frame(maxWidth: .infinity, minHeight: 50)
+                    HStack(spacing: 14) {
+                        Image(systemName: "camera.fill")
+                            .font(.title3)
+                            .frame(width: 44, height: 44)
+                            .background(Color.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Take a Photo")
+                                .font(.subheadline.weight(.semibold))
+                            Text("Open camera to capture now")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(14)
+                    .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 16))
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.plain)
 
                 PhotosPicker(
                     selection: $vm.pickerItems,
                     maxSelectionCount: 8,
                     matching: .images
                 ) {
-                    Label("Library", systemImage: "photo.on.rectangle")
-                        .frame(maxWidth: .infinity, minHeight: 50)
+                    HStack(spacing: 14) {
+                        Image(systemName: "photo.on.rectangle.angled")
+                            .font(.title3)
+                            .frame(width: 44, height: 44)
+                            .background(Color.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+                            .foregroundStyle(.orange)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Choose from Library")
+                                .font(.subheadline.weight(.semibold))
+                            Text("Pick existing photos")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(14)
+                    .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 16))
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(.plain)
             }
 
+            Spacer()
             Spacer()
         }
     }
