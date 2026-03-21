@@ -16,6 +16,7 @@ struct LayoutExportService {
         let view = LayoutCanvasView(
             photos: layout.orderedPhotos,
             preset: preset,
+            dayKey: layout.dayKey,
             gap: 4
         )
         .frame(width: size.width, height: size.height)

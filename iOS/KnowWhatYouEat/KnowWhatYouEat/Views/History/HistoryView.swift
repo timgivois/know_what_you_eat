@@ -29,8 +29,6 @@ struct HistoryView: View {
 private struct HistoryContentView: View {
     let vm: HistoryViewModel
 
-    private let columns = [GridItem(.flexible()), GridItem(.flexible())]
-
     var body: some View {
         if vm.layouts.isEmpty {
             ContentUnavailableView(
@@ -40,7 +38,7 @@ private struct HistoryContentView: View {
             )
         } else {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 16) {
+                LazyVStack(spacing: 24) {
                     ForEach(vm.layouts) { layout in
                         NavigationLink {
                             LayoutDetailView(layout: layout)
@@ -69,7 +67,8 @@ private struct HistoryCardView: View {
                 if let preset {
                     LayoutCanvasView(
                         photos: layout.orderedPhotos,
-                        preset: preset
+                        preset: preset,
+                        dayKey: layout.dayKey
                     )
                 } else {
                     Color(.systemGray5)

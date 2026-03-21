@@ -17,7 +17,8 @@ struct LayoutDetailView: View {
                 if let preset {
                     LayoutCanvasView(
                         photos: layout.orderedPhotos,
-                        preset: preset
+                        preset: preset,
+                        dayKey: layout.dayKey
                     )
                     .aspectRatio(1, contentMode: .fit)
                     .clipShape(RoundedRectangle(cornerRadius: 14))

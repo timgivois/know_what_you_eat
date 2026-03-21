@@ -94,6 +94,12 @@ private struct EditorContentView: View {
             } message: {
                 Text(vm.errorMessage ?? "")
             }
+            .fullScreenCover(isPresented: $vm.showCamera) {
+                CameraView { image in
+                    vm.addCameraPhoto(image)
+                }
+                .ignoresSafeArea()
+            }
             .onChange(of: vm.pickerItems) { _, newItems in
                 Task { await vm.loadPhotos(from: newItems) }
             }
@@ -109,7 +115,8 @@ private struct EditorContentView: View {
             if vm.photoCount > 0, let preset = vm.currentPreset {
                 LayoutCanvasView(
                     photos: vm.layout?.orderedPhotos ?? [],
-                    preset: preset
+                    preset: preset,
+                    dayKey: vm.layout?.dayKey
                 )
                 .frame(width: side, height: side)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -162,8 +169,27 @@ private struct EditorContentView: View {
                     }
                 }
 
-                // Add button
+                // Add buttons
                 if vm.canAddMore {
+                    // Camera button
+                    Button {
+                        vm.showCamera = true
+                    } label: {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color(.systemGray5))
+                            .frame(width: 72, height: 72)
+                            .overlay(
+                                VStack(spacing: 4) {
+                                    Image(systemName: "camera.fill")
+                                        .font(.title2.weight(.semibold))
+                                    Text("Camera")
+                                        .font(.caption2)
+                                }
+                                .foregroundStyle(.secondary)
+                            )
+                    }
+
+                    // Library picker
                     PhotosPicker(
                         selection: $vm.pickerItems,
                         maxSelectionCount: 8 - vm.photoCount,
@@ -174,7 +200,7 @@ private struct EditorContentView: View {
                             .frame(width: 72, height: 72)
                             .overlay(
                                 VStack(spacing: 4) {
-                                    Image(systemName: "plus")
+                                    Image(systemName: "photo.on.rectangle")
                                         .font(.title2.weight(.semibold))
                                     Text("\(vm.photoCount)/8")
                                         .font(.caption2)
