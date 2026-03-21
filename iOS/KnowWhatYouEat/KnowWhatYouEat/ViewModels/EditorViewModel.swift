@@ -14,9 +14,10 @@ final class EditorViewModel {
     var shareImage: UIImage?
     var showCamera = false
     var showLayoutSettings = false
+    var showAddMenu = false
 
-    /// Set to true after the user commits the layout — HomeView observes this.
-    var didSave = false
+    /// The photo currently selected for the overlay (blur + actions).
+    var selectedPhoto: PhotoItem?
 
     private let store: LayoutStore
 
@@ -25,11 +26,6 @@ final class EditorViewModel {
     }
 
     // MARK: - Load
-
-    /// Returns true if today already has a saved layout.
-    var todayIsSaved: Bool {
-        layout?.isSaved == true
-    }
 
     func loadOrCreateTodayLayout() {
         do {
@@ -51,7 +47,11 @@ final class EditorViewModel {
 
     func loadPhotos(from items: [PhotosPickerItem]) async {
         isLoading = true
-        defer { isLoading = false }
+        defer {
+            isLoading = false
+            // Clear selection so the picker doesn't carry over next time
+            pickerItems = []
+        }
 
         if layout == nil {
             do {
@@ -66,6 +66,7 @@ final class EditorViewModel {
 
         let currentCount = currentLayout.photos.count
         for (offset, item) in items.enumerated() {
+            guard currentCount + offset < 8 else { break }
             guard let data = try? await item.loadTransferable(type: Data.self),
                   let uiImage = UIImage(data: data),
                   let jpeg = uiImage.jpegData(compressionQuality: 0.82) else { continue }
@@ -108,6 +109,7 @@ final class EditorViewModel {
 
     func removePhoto(_ photo: PhotoItem) {
         guard let currentLayout = layout else { return }
+        selectedPhoto = nil
         do {
             try store.removePhoto(photo, from: currentLayout)
             let count = currentLayout.photos.count
@@ -117,18 +119,6 @@ final class EditorViewModel {
                 selectedPresetID = first.id
                 try? store.updatePreset(layout: currentLayout, presetID: first.id)
             }
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
-
-    // MARK: - Save / Commit
-
-    func commitLayout() {
-        guard let currentLayout = layout else { return }
-        do {
-            try store.commitLayout(currentLayout)
-            didSave = true
         } catch {
             errorMessage = error.localizedDescription
         }

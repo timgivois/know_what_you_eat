@@ -3,7 +3,6 @@ import SwiftUI
 struct HistoryView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var vm: HistoryViewModel?
-    var onNewLayout: (() -> Void)?
 
     var body: some View {
         NavigationStack {
@@ -15,15 +14,6 @@ struct HistoryView: View {
                 }
             }
             .navigationTitle("History")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        onNewLayout?()
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                    }
-                }
-            }
             .onAppear {
                 if vm == nil {
                     let store = LayoutStore(context: modelContext)
@@ -44,7 +34,7 @@ private struct HistoryContentView: View {
             ContentUnavailableView(
                 "No layouts yet",
                 systemImage: "photo.on.rectangle.angled",
-                description: Text("Save a layout to see it here.")
+                description: Text("Add photos on the Today tab to create your first layout.")
             )
         } else {
             ScrollView {

@@ -4,12 +4,11 @@ import PhotosUI
 struct EditorView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var vm: EditorViewModel?
-    var onSaved: (() -> Void)?
 
     var body: some View {
         Group {
             if let vm {
-                EditorContentView(vm: vm, onSaved: onSaved)
+                EditorContentView(vm: vm)
             } else {
                 ProgressView()
             }
@@ -29,36 +28,31 @@ struct EditorView: View {
 
 private struct EditorContentView: View {
     @Bindable var vm: EditorViewModel
-    var onSaved: (() -> Void)?
     @State private var hasTriggeredAutoCamera = false
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    if vm.photoCount > 0 {
-                        // Layout canvas
-                        canvasSection
-                            .padding(.horizontal)
-
-                        // Add-more card with camera + library icons
-                        if vm.canAddMore {
-                            addMoreCard
+            ZStack(alignment: .bottomTrailing) {
+                // Main content
+                ScrollView {
+                    VStack(spacing: 20) {
+                        if vm.photoCount > 0 {
+                            canvasSection
+                                .padding(.horizontal)
+                        } else {
+                            emptyState
                                 .padding(.horizontal)
                         }
-
-                        // Photo strip for removing individual photos
-                        photoStrip
-
-                        // Save button
-                        saveButton
-                            .padding(.horizontal)
-                    } else {
-                        emptyState
-                            .padding(.horizontal)
                     }
+                    .padding(.vertical)
                 }
-                .padding(.vertical)
+
+                // Floating add button (two-step)
+                if vm.canAddMore && vm.photoCount > 0 {
+                    addButton
+                        .padding(.trailing, 20)
+                        .padding(.bottom, 20)
+                }
             }
             .navigationTitle("Today")
             .navigationBarTitleDisplayMode(.inline)
@@ -89,6 +83,12 @@ private struct EditorContentView: View {
                         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
                 }
             }
+            // Photo overlay (blur + actions)
+            .overlay {
+                if let photo = vm.selectedPhoto {
+                    PhotoOverlayView(photo: photo, vm: vm)
+                }
+            }
             .sheet(isPresented: $vm.showShareSheet) {
                 if let img = vm.shareImage {
                     ShareSheet(items: [img])
@@ -111,9 +111,6 @@ private struct EditorContentView: View {
             .onChange(of: vm.pickerItems) { _, newItems in
                 Task { await vm.loadPhotos(from: newItems) }
             }
-            .onChange(of: vm.didSave) { _, saved in
-                if saved { onSaved?() }
-            }
             .onAppear {
                 if !hasTriggeredAutoCamera && vm.shouldAutoOpenCamera {
                     hasTriggeredAutoCamera = true
@@ -123,113 +120,108 @@ private struct EditorContentView: View {
         }
     }
 
-    // MARK: - Canvas
+    // MARK: - Canvas (tappable photos)
 
     @ViewBuilder
     private var canvasSection: some View {
         let side = min(UIScreen.main.bounds.width - 32, 380)
         if let preset = vm.currentPreset {
-            LayoutCanvasView(
-                photos: vm.layout?.orderedPhotos ?? [],
-                preset: preset,
-                dayKey: vm.layout?.dayKey
-            )
-            .frame(width: side, height: side)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .shadow(radius: 4)
+            ZStack {
+                LayoutCanvasView(
+                    photos: vm.layout?.orderedPhotos ?? [],
+                    preset: preset,
+                    dayKey: vm.layout?.dayKey
+                )
+                .frame(width: side, height: side)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shadow(radius: 4)
+
+                // Invisible tap targets over each photo slot
+                GeometryReader { geo in
+                    let bannerHeight = geo.size.height * 0.08
+                    let canvasSize = CGSize(width: geo.size.width,
+                                            height: geo.size.height - bannerHeight)
+
+                    ForEach(Array(preset.slots.enumerated()), id: \.offset) { index, slot in
+                        if index < (vm.layout?.orderedPhotos.count ?? 0) {
+                            let rect = slot.cgRect(in: canvasSize)
+                            let shifted = CGRect(x: rect.origin.x,
+                                                 y: rect.origin.y + bannerHeight,
+                                                 width: rect.width,
+                                                 height: rect.height)
+
+                            Color.clear
+                                .contentShape(Rectangle())
+                                .frame(width: shifted.width, height: shifted.height)
+                                .position(x: shifted.midX, y: shifted.midY)
+                                .onTapGesture {
+                                    let photos = vm.layout?.orderedPhotos ?? []
+                                    if index < photos.count {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            vm.selectedPhoto = photos[index]
+                                        }
+                                    }
+                                }
+                        }
+                    }
+                }
+                .frame(width: side, height: side)
+            }
             .frame(maxWidth: .infinity)
         }
     }
 
-    // MARK: - Add more card
+    // MARK: - Floating add button (two-step)
 
-    private var addMoreCard: some View {
-        HStack(spacing: 0) {
-            // Camera
-            Button {
-                vm.showCamera = true
-            } label: {
-                VStack(spacing: 6) {
-                    Image(systemName: "camera.fill")
-                        .font(.title2)
-                    Text("Camera")
-                        .font(.caption)
-                }
-                .frame(maxWidth: .infinity, minHeight: 72)
-                .foregroundStyle(.primary)
-            }
+    private var addButton: some View {
+        VStack(spacing: 12) {
+            // Expanded options
+            if vm.showAddMenu {
+                VStack(spacing: 8) {
+                    Button {
+                        vm.showAddMenu = false
+                        vm.showCamera = true
+                    } label: {
+                        Image(systemName: "camera.fill")
+                            .font(.title3)
+                            .frame(width: 50, height: 50)
+                            .background(.thinMaterial, in: Circle())
+                            .shadow(radius: 4)
+                    }
 
-            Divider()
-                .frame(height: 48)
-
-            // Photo library
-            PhotosPicker(
-                selection: $vm.pickerItems,
-                maxSelectionCount: 8 - vm.photoCount,
-                matching: .images
-            ) {
-                VStack(spacing: 6) {
-                    Image(systemName: "photo.on.rectangle")
-                        .font(.title2)
-                    Text("Library")
-                        .font(.caption)
-                }
-                .frame(maxWidth: .infinity, minHeight: 72)
-                .foregroundStyle(.primary)
-            }
-        }
-        .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 12))
-    }
-
-    // MARK: - Photo strip
-
-    private var photoStrip: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Photos (\(vm.photoCount)/8)")
-                .font(.subheadline.weight(.semibold))
-                .padding(.horizontal)
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
-                    ForEach(vm.layout?.orderedPhotos ?? []) { photo in
-                        if let img = photo.uiImage {
-                            ZStack(alignment: .topTrailing) {
-                                Image(uiImage: img)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 72, height: 72)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-
-                                Button {
-                                    vm.removePhoto(photo)
-                                } label: {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .symbolRenderingMode(.palette)
-                                        .foregroundStyle(.white, .black.opacity(0.6))
-                                        .font(.system(size: 18))
-                                }
-                                .offset(x: 6, y: -6)
-                            }
-                        }
+                    PhotosPicker(
+                        selection: $vm.pickerItems,
+                        maxSelectionCount: 8 - vm.photoCount,
+                        matching: .images
+                    ) {
+                        Image(systemName: "photo.on.rectangle")
+                            .font(.title3)
+                            .frame(width: 50, height: 50)
+                            .background(.thinMaterial, in: Circle())
+                            .shadow(radius: 4)
+                    }
+                    .onChange(of: vm.pickerItems) { _, _ in
+                        vm.showAddMenu = false
                     }
                 }
-                .padding(.horizontal)
+                .transition(.scale.combined(with: .opacity))
+            }
+
+            // Main + button
+            Button {
+                withAnimation(.spring(duration: 0.25)) {
+                    vm.showAddMenu.toggle()
+                }
+            } label: {
+                Image(systemName: vm.showAddMenu ? "xmark" : "plus")
+                    .font(.title2.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 56, height: 56)
+                    .background(Color.accentColor, in: Circle())
+                    .shadow(color: .black.opacity(0.25), radius: 8, y: 4)
+                    .rotationEffect(.degrees(vm.showAddMenu ? 45 : 0))
             }
         }
-    }
-
-    // MARK: - Save button
-
-    private var saveButton: some View {
-        Button {
-            vm.commitLayout()
-        } label: {
-            Label("Save Layout", systemImage: "checkmark.circle.fill")
-                .font(.headline)
-                .frame(maxWidth: .infinity, minHeight: 50)
-        }
-        .buttonStyle(.borderedProminent)
-        .disabled(vm.photoCount == 0)
     }
 
     // MARK: - Empty state
@@ -245,7 +237,7 @@ private struct EditorContentView: View {
             Text("What did you eat today?")
                 .font(.title3.weight(.medium))
 
-            Text("Take a photo or pick one from your library to start today's layout.")
+            Text("Take a photo or pick from your library.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -274,3 +266,83 @@ private struct EditorContentView: View {
         }
     }
 }
+
+// MARK: - Photo overlay (Instagram/Snap style)
+
+private struct PhotoOverlayView: View {
+    let photo: PhotoItem
+    @Bindable var vm: EditorViewModel
+
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "h:mm a"
+        return f
+    }()
+
+    var body: some View {
+        ZStack {
+            // Blurred background
+            Color.black.opacity(0.6)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        vm.selectedPhoto = nil
+                    }
+                }
+
+            VStack(spacing: 24) {
+                // Selected photo large
+                if let img = photo.uiImage {
+                    Image(uiImage: img)
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .shadow(radius: 12)
+                        .padding(.horizontal, 40)
+                }
+
+                // Time label
+                Text(Self.timeFormatter.string(from: photo.capturedAt))
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.white.opacity(0.8))
+
+                // Action buttons
+                HStack(spacing: 32) {
+                    Button(role: .destructive) {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            vm.removePhoto(photo)
+                        }
+                    } label: {
+                        VStack(spacing: 6) {
+                            Image(systemName: "trash.fill")
+                                .font(.title2)
+                            Text("Delete")
+                                .font(.caption)
+                        }
+                        .foregroundStyle(.white)
+                        .frame(width: 80, height: 70)
+                        .background(Color.red.opacity(0.8), in: RoundedRectangle(cornerRadius: 12))
+                    }
+
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            vm.selectedPhoto = nil
+                        }
+                    } label: {
+                        VStack(spacing: 6) {
+                            Image(systemName: "xmark")
+                                .font(.title2)
+                            Text("Cancel")
+                                .font(.caption)
+                        }
+                        .foregroundStyle(.white)
+                        .frame(width: 80, height: 70)
+                        .background(Color(.systemGray).opacity(0.8), in: RoundedRectangle(cornerRadius: 12))
+                    }
+                }
+            }
+        }
+        .transition(.opacity)
+    }
+}
+
