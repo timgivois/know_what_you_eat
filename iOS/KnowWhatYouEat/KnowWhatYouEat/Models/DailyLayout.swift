@@ -8,7 +8,7 @@ final class DailyLayout {
     var presetID: String
     var createdAt: Date
     var updatedAt: Date
-    var isSaved: Bool         // true once the user "commits" the layout
+    var isSaved: Bool = false // true once the user "commits" the layout
 
     @Relationship(deleteRule: .cascade, inverse: \PhotoItem.layout)
     var photos: [PhotoItem] = []
