@@ -1,0 +1,539 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A001 /* KnowWhatYouEatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A101 /* KnowWhatYouEatApp.swift */; };
+		A002 /* DailyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A102 /* DailyLayout.swift */; };
+		A003 /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A103 /* PhotoItem.swift */; };
+		A004 /* LayoutPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A104 /* LayoutPreset.swift */; };
+		A005 /* LayoutStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A105 /* LayoutStore.swift */; };
+		A006 /* LayoutExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A106 /* LayoutExportService.swift */; };
+		A007 /* LayoutCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A107 /* LayoutCanvasView.swift */; };
+		A008 /* PresetPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A108 /* PresetPickerView.swift */; };
+		A009 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A109 /* ShareSheet.swift */; };
+		A010 /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110 /* EditorViewModel.swift */; };
+		A011 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111 /* HistoryViewModel.swift */; };
+		A012 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112 /* EditorView.swift */; };
+		A013 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A113 /* HistoryView.swift */; };
+		A014 /* LayoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114 /* LayoutDetailView.swift */; };
+		A015 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A115 /* HomeView.swift */; };
+		A016 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A116 /* Assets.xcassets */; };
+		A017 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A117 /* Info.plist */; };
+		B001 /* KnowWhatYouEatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B101 /* KnowWhatYouEatTests.swift */; };
+		B002 /* LayoutPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A104 /* LayoutPreset.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A101 /* KnowWhatYouEatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowWhatYouEatApp.swift; sourceTree = "<group>"; };
+		A102 /* DailyLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLayout.swift; sourceTree = "<group>"; };
+		A103 /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
+		A104 /* LayoutPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutPreset.swift; sourceTree = "<group>"; };
+		A105 /* LayoutStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutStore.swift; sourceTree = "<group>"; };
+		A106 /* LayoutExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutExportService.swift; sourceTree = "<group>"; };
+		A107 /* LayoutCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutCanvasView.swift; sourceTree = "<group>"; };
+		A108 /* PresetPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetPickerView.swift; sourceTree = "<group>"; };
+		A109 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		A110 /* EditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewModel.swift; sourceTree = "<group>"; };
+		A111 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		A112 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		A113 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		A114 /* LayoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutDetailView.swift; sourceTree = "<group>"; };
+		A115 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A116 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A117 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B101 /* KnowWhatYouEatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowWhatYouEatTests.swift; sourceTree = "<group>"; };
+		PROD /* KnowWhatYouEat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KnowWhatYouEat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		TEST /* KnowWhatYouEatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KnowWhatYouEatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		ROOT = {
+			isa = PBXGroup;
+			children = (
+				APPGRP /* KnowWhatYouEat */,
+				TESTGRP /* KnowWhatYouEatTests */,
+				PRODGRP /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		PRODGRP /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				PROD /* KnowWhatYouEat.app */,
+				TEST /* KnowWhatYouEatTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		APPGRP /* KnowWhatYouEat */ = {
+			isa = PBXGroup;
+			children = (
+				APPDIR /* App */,
+				MODDIR /* Models */,
+				VMDIR /* ViewModels */,
+				VWDIR /* Views */,
+				SVCDIR /* Services */,
+				PREDIR /* Presets */,
+				A116 /* Assets.xcassets */,
+			);
+			path = KnowWhatYouEat;
+			sourceTree = "<group>";
+		};
+		APPDIR /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A101 /* KnowWhatYouEatApp.swift */,
+				A117 /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		MODDIR /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A102 /* DailyLayout.swift */,
+				A103 /* PhotoItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		VMDIR /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A110 /* EditorViewModel.swift */,
+				A111 /* HistoryViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		VWDIR /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				HOMEDIR /* Home */,
+				EDITDIR /* Editor */,
+				HISTDIR /* History */,
+				SHRDIR /* Shared */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		HOMEDIR /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A115 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		EDITDIR /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				A112 /* EditorView.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		HISTDIR /* History */ = {
+			isa = PBXGroup;
+			children = (
+				A113 /* HistoryView.swift */,
+				A114 /* LayoutDetailView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		SHRDIR /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A107 /* LayoutCanvasView.swift */,
+				A108 /* PresetPickerView.swift */,
+				A109 /* ShareSheet.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		SVCDIR /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A105 /* LayoutStore.swift */,
+				A106 /* LayoutExportService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		PREDIR /* Presets */ = {
+			isa = PBXGroup;
+			children = (
+				A104 /* LayoutPreset.swift */,
+			);
+			path = Presets;
+			sourceTree = "<group>";
+		};
+		TESTGRP /* KnowWhatYouEatTests */ = {
+			isa = PBXGroup;
+			children = (
+				B101 /* KnowWhatYouEatTests.swift */,
+			);
+			path = KnowWhatYouEatTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		APPTGT /* KnowWhatYouEat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = APPCFG /* Build configuration list for PBXNativeTarget "KnowWhatYouEat" */;
+			buildPhases = (
+				APPSRC /* Sources */,
+				APPRES /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KnowWhatYouEat;
+			productName = KnowWhatYouEat;
+			productReference = PROD /* KnowWhatYouEat.app */;
+			productType = "com.apple.product-type.application";
+		};
+		TESTTGT /* KnowWhatYouEatTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = TESTCFG /* Build configuration list for PBXNativeTarget "KnowWhatYouEatTests" */;
+			buildPhases = (
+				TESTSRC /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				TESTDEP /* PBXTargetDependency */,
+			);
+			name = KnowWhatYouEatTests;
+			productName = KnowWhatYouEatTests;
+			productReference = TEST /* KnowWhatYouEatTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		PROJ /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					APPTGT = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					TESTTGT = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = APPTGT;
+					};
+				};
+			};
+			buildConfigurationList = PROJCFG /* Build configuration list for PBXProject "KnowWhatYouEat" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = ROOT;
+			productRefGroup = PRODGRP /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				APPTGT /* KnowWhatYouEat */,
+				TESTTGT /* KnowWhatYouEatTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		APPRES /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A016 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		APPSRC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A001 /* KnowWhatYouEatApp.swift in Sources */,
+				A002 /* DailyLayout.swift in Sources */,
+				A003 /* PhotoItem.swift in Sources */,
+				A004 /* LayoutPreset.swift in Sources */,
+				A005 /* LayoutStore.swift in Sources */,
+				A006 /* LayoutExportService.swift in Sources */,
+				A007 /* LayoutCanvasView.swift in Sources */,
+				A008 /* PresetPickerView.swift in Sources */,
+				A009 /* ShareSheet.swift in Sources */,
+				A010 /* EditorViewModel.swift in Sources */,
+				A011 /* HistoryViewModel.swift in Sources */,
+				A012 /* EditorView.swift in Sources */,
+				A013 /* HistoryView.swift in Sources */,
+				A014 /* LayoutDetailView.swift in Sources */,
+				A015 /* HomeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		TESTSRC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B001 /* KnowWhatYouEatTests.swift in Sources */,
+				B002 /* LayoutPreset.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		TESTDEP /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = APPTGT /* KnowWhatYouEat */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		PROJDBG /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_CYCLE = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		PROJREL /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_CYCLE = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		APPDBG /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = KnowWhatYouEat/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.knowwhatyoueat.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		APPREL /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = KnowWhatYouEat/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.knowwhatyoueat.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		TESTDBG /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.knowwhatyoueat.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KnowWhatYouEat.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KnowWhatYouEat";
+			};
+			name = Debug;
+		};
+		TESTREL /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.knowwhatyoueat.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KnowWhatYouEat.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KnowWhatYouEat";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		PROJCFG /* Build configuration list for PBXProject "KnowWhatYouEat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				PROJDBG /* Debug */,
+				PROJREL /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		APPCFG /* Build configuration list for PBXNativeTarget "KnowWhatYouEat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				APPDBG /* Debug */,
+				APPREL /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		TESTCFG /* Build configuration list for PBXNativeTarget "KnowWhatYouEatTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				TESTDBG /* Debug */,
+				TESTREL /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = PROJ /* Project object */;
+}
