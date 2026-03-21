@@ -15,7 +15,7 @@ final class HistoryViewModel {
 
     func load() {
         do {
-            layouts = try store.allLayouts()
+            layouts = try store.savedLayouts()
         } catch {
             errorMessage = error.localizedDescription
         }

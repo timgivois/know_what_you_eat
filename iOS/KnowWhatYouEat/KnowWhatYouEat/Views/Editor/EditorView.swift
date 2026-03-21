@@ -4,11 +4,12 @@ import PhotosUI
 struct EditorView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var vm: EditorViewModel?
+    var onSaved: (() -> Void)?
 
     var body: some View {
         Group {
             if let vm {
-                EditorContentView(vm: vm)
+                EditorContentView(vm: vm, onSaved: onSaved)
             } else {
                 ProgressView()
             }
@@ -24,56 +25,60 @@ struct EditorView: View {
     }
 }
 
+// MARK: - Main content
+
 private struct EditorContentView: View {
     @Bindable var vm: EditorViewModel
+    var onSaved: (() -> Void)?
+    @State private var hasTriggeredAutoCamera = false
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                // Canvas
-                canvasSection
-                    .padding()
-
-                Divider()
-
-                // Preset picker (only when photos exist)
-                if vm.photoCount > 0 {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Layout")
-                            .font(.subheadline.weight(.semibold))
+            ScrollView {
+                VStack(spacing: 20) {
+                    if vm.photoCount > 0 {
+                        // Layout canvas
+                        canvasSection
                             .padding(.horizontal)
-                            .padding(.top, 12)
 
-                        PresetPickerView(
-                            photoCount: vm.photoCount,
-                            selectedPresetID: Binding(
-                                get: { vm.selectedPresetID },
-                                set: { vm.applyPreset($0) }
-                            )
-                        )
-                        .padding(.bottom, 12)
+                        // Add-more card with camera + library icons
+                        if vm.canAddMore {
+                            addMoreCard
+                                .padding(.horizontal)
+                        }
+
+                        // Photo strip for removing individual photos
+                        photoStrip
+
+                        // Save button
+                        saveButton
+                            .padding(.horizontal)
+                    } else {
+                        emptyState
+                            .padding(.horizontal)
                     }
-
-                    Divider()
                 }
-
-                // Photo strip
-                photoStrip
-                    .padding(.vertical, 12)
-
-                Spacer()
+                .padding(.vertical)
             }
             .navigationTitle("Today")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     if vm.photoCount > 0 {
-                        Button {
-                            Task { await vm.prepareShare() }
-                        } label: {
-                            Image(systemName: "square.and.arrow.up")
+                        HStack(spacing: 16) {
+                            Button {
+                                vm.showLayoutSettings = true
+                            } label: {
+                                Image(systemName: "slider.horizontal.3")
+                            }
+
+                            Button {
+                                Task { await vm.prepareShare() }
+                            } label: {
+                                Image(systemName: "square.and.arrow.up")
+                            }
+                            .disabled(vm.isLoading)
                         }
-                        .disabled(vm.isLoading)
                     }
                 }
             }
@@ -89,6 +94,9 @@ private struct EditorContentView: View {
                     ShareSheet(items: [img])
                 }
             }
+            .sheet(isPresented: $vm.showLayoutSettings) {
+                LayoutSettingsView(vm: vm)
+            }
             .alert("Error", isPresented: .constant(vm.errorMessage != nil)) {
                 Button("OK") { vm.errorMessage = nil }
             } message: {
@@ -103,6 +111,15 @@ private struct EditorContentView: View {
             .onChange(of: vm.pickerItems) { _, newItems in
                 Task { await vm.loadPhotos(from: newItems) }
             }
+            .onChange(of: vm.didSave) { _, saved in
+                if saved { onSaved?() }
+            }
+            .onAppear {
+                if !hasTriggeredAutoCamera && vm.shouldAutoOpenCamera {
+                    hasTriggeredAutoCamera = true
+                    vm.showCamera = true
+                }
+            }
         }
     }
 
@@ -110,107 +127,150 @@ private struct EditorContentView: View {
 
     @ViewBuilder
     private var canvasSection: some View {
-        let side = min(UIScreen.main.bounds.width - 32, 360)
-        Group {
-            if vm.photoCount > 0, let preset = vm.currentPreset {
-                LayoutCanvasView(
-                    photos: vm.layout?.orderedPhotos ?? [],
-                    preset: preset,
-                    dayKey: vm.layout?.dayKey
-                )
-                .frame(width: side, height: side)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .shadow(radius: 4)
-            } else {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemGray6))
-                    .frame(width: side, height: side)
-                    .overlay(
-                        VStack(spacing: 8) {
-                            Image(systemName: "fork.knife.circle")
-                                .font(.system(size: 48))
-                                .foregroundStyle(.secondary)
-                            Text("Add photos to start your layout")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                        }
-                        .padding()
-                    )
+        let side = min(UIScreen.main.bounds.width - 32, 380)
+        if let preset = vm.currentPreset {
+            LayoutCanvasView(
+                photos: vm.layout?.orderedPhotos ?? [],
+                preset: preset,
+                dayKey: vm.layout?.dayKey
+            )
+            .frame(width: side, height: side)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .shadow(radius: 4)
+            .frame(maxWidth: .infinity)
+        }
+    }
+
+    // MARK: - Add more card
+
+    private var addMoreCard: some View {
+        HStack(spacing: 0) {
+            // Camera
+            Button {
+                vm.showCamera = true
+            } label: {
+                VStack(spacing: 6) {
+                    Image(systemName: "camera.fill")
+                        .font(.title2)
+                    Text("Camera")
+                        .font(.caption)
+                }
+                .frame(maxWidth: .infinity, minHeight: 72)
+                .foregroundStyle(.primary)
+            }
+
+            Divider()
+                .frame(height: 48)
+
+            // Photo library
+            PhotosPicker(
+                selection: $vm.pickerItems,
+                maxSelectionCount: 8 - vm.photoCount,
+                matching: .images
+            ) {
+                VStack(spacing: 6) {
+                    Image(systemName: "photo.on.rectangle")
+                        .font(.title2)
+                    Text("Library")
+                        .font(.caption)
+                }
+                .frame(maxWidth: .infinity, minHeight: 72)
+                .foregroundStyle(.primary)
             }
         }
+        .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 12))
     }
 
     // MARK: - Photo strip
 
     private var photoStrip: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                // Existing photos
-                ForEach(vm.layout?.orderedPhotos ?? []) { photo in
-                    if let img = photo.uiImage {
-                        ZStack(alignment: .topTrailing) {
-                            Image(uiImage: img)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 72, height: 72)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Photos (\(vm.photoCount)/8)")
+                .font(.subheadline.weight(.semibold))
+                .padding(.horizontal)
 
-                            Button {
-                                vm.removePhoto(photo)
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .symbolRenderingMode(.palette)
-                                    .foregroundStyle(.white, .black.opacity(0.6))
-                                    .font(.system(size: 18))
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(vm.layout?.orderedPhotos ?? []) { photo in
+                        if let img = photo.uiImage {
+                            ZStack(alignment: .topTrailing) {
+                                Image(uiImage: img)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 72, height: 72)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                                Button {
+                                    vm.removePhoto(photo)
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .symbolRenderingMode(.palette)
+                                        .foregroundStyle(.white, .black.opacity(0.6))
+                                        .font(.system(size: 18))
+                                }
+                                .offset(x: 6, y: -6)
                             }
-                            .offset(x: 6, y: -6)
                         }
                     }
                 }
-
-                // Add buttons
-                if vm.canAddMore {
-                    // Camera button
-                    Button {
-                        vm.showCamera = true
-                    } label: {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color(.systemGray5))
-                            .frame(width: 72, height: 72)
-                            .overlay(
-                                VStack(spacing: 4) {
-                                    Image(systemName: "camera.fill")
-                                        .font(.title2.weight(.semibold))
-                                    Text("Camera")
-                                        .font(.caption2)
-                                }
-                                .foregroundStyle(.secondary)
-                            )
-                    }
-
-                    // Library picker
-                    PhotosPicker(
-                        selection: $vm.pickerItems,
-                        maxSelectionCount: 8 - vm.photoCount,
-                        matching: .images
-                    ) {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color(.systemGray5))
-                            .frame(width: 72, height: 72)
-                            .overlay(
-                                VStack(spacing: 4) {
-                                    Image(systemName: "photo.on.rectangle")
-                                        .font(.title2.weight(.semibold))
-                                    Text("\(vm.photoCount)/8")
-                                        .font(.caption2)
-                                }
-                                .foregroundStyle(.secondary)
-                            )
-                    }
-                }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
+        }
+    }
+
+    // MARK: - Save button
+
+    private var saveButton: some View {
+        Button {
+            vm.commitLayout()
+        } label: {
+            Label("Save Layout", systemImage: "checkmark.circle.fill")
+                .font(.headline)
+                .frame(maxWidth: .infinity, minHeight: 50)
+        }
+        .buttonStyle(.borderedProminent)
+        .disabled(vm.photoCount == 0)
+    }
+
+    // MARK: - Empty state
+
+    private var emptyState: some View {
+        VStack(spacing: 20) {
+            Spacer().frame(height: 40)
+
+            Image(systemName: "fork.knife.circle")
+                .font(.system(size: 64))
+                .foregroundStyle(.secondary)
+
+            Text("What did you eat today?")
+                .font(.title3.weight(.medium))
+
+            Text("Take a photo or pick one from your library to start today's layout.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+
+            HStack(spacing: 16) {
+                Button {
+                    vm.showCamera = true
+                } label: {
+                    Label("Camera", systemImage: "camera.fill")
+                        .frame(maxWidth: .infinity, minHeight: 50)
+                }
+                .buttonStyle(.borderedProminent)
+
+                PhotosPicker(
+                    selection: $vm.pickerItems,
+                    maxSelectionCount: 8,
+                    matching: .images
+                ) {
+                    Label("Library", systemImage: "photo.on.rectangle")
+                        .frame(maxWidth: .infinity, minHeight: 50)
+                }
+                .buttonStyle(.bordered)
+            }
+
+            Spacer()
         }
     }
 }

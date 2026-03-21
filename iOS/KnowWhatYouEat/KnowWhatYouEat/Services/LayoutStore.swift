@@ -70,6 +70,20 @@ final class LayoutStore {
         try context.save()
     }
 
+    func commitLayout(_ layout: DailyLayout) throws {
+        layout.isSaved = true
+        layout.updatedAt = Date()
+        try context.save()
+    }
+
+    func savedLayouts() throws -> [DailyLayout] {
+        let descriptor = FetchDescriptor<DailyLayout>(
+            predicate: #Predicate { $0.isSaved == true },
+            sortBy: [SortDescriptor(\.dayKey, order: .reverse)]
+        )
+        return try context.fetch(descriptor)
+    }
+
     func save() throws {
         try context.save()
     }

@@ -8,6 +8,7 @@ final class DailyLayout {
     var presetID: String
     var createdAt: Date
     var updatedAt: Date
+    var isSaved: Bool         // true once the user "commits" the layout
 
     @Relationship(deleteRule: .cascade, inverse: \PhotoItem.layout)
     var photos: [PhotoItem] = []
@@ -18,6 +19,7 @@ final class DailyLayout {
         self.presetID = presetID
         self.createdAt = Date()
         self.updatedAt = Date()
+        self.isSaved = false
     }
 
     /// Photos sorted by their slot order

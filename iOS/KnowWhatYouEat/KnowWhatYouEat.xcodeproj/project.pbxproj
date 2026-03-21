@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5AE8D7CD2F6F320C005E0400 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8D7CC2F6F320C005E0400 /* CameraView.swift */; };
+		5AE8D7CF2F6F3536005E0400 /* LayoutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8D7CE2F6F3536005E0400 /* LayoutSettingsView.swift */; };
 		A001 /* KnowWhatYouEatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A101 /* KnowWhatYouEatApp.swift */; };
 		A002 /* DailyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A102 /* DailyLayout.swift */; };
 		A003 /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A103 /* PhotoItem.swift */; };
@@ -40,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		5AE8D7CC2F6F320C005E0400 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		5AE8D7CE2F6F3536005E0400 /* LayoutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutSettingsView.swift; sourceTree = "<group>"; };
 		A101 /* KnowWhatYouEatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowWhatYouEatApp.swift; sourceTree = "<group>"; };
 		A102 /* DailyLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLayout.swift; sourceTree = "<group>"; };
 		A103 /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				A112 /* EditorView.swift */,
+				5AE8D7CE2F6F3536005E0400 /* LayoutSettingsView.swift */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 				A007 /* LayoutCanvasView.swift in Sources */,
 				A008 /* PresetPickerView.swift in Sources */,
 				A009 /* ShareSheet.swift in Sources */,
+				5AE8D7CF2F6F3536005E0400 /* LayoutSettingsView.swift in Sources */,
 				A010 /* EditorViewModel.swift in Sources */,
 				A011 /* HistoryViewModel.swift in Sources */,
 				A012 /* EditorView.swift in Sources */,
