@@ -10,7 +10,14 @@ struct KnowWhatYouEatApp: App {
         do {
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            // Migration failed — wipe the store and start fresh.
+            // Safe for a local-only, single-device app with no sync.
+            try? FileManager.default.removeItem(at: config.url)
+            do {
+                return try ModelContainer(for: schema, configurations: [config])
+            } catch {
+                fatalError("Could not create ModelContainer: \(error)")
+            }
         }
     }()
 
